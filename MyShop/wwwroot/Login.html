@@ -25,14 +25,15 @@
         <br /> <br />
         שם משתמש:<input id="userName1" />
         <br /> <br />
-        סיסמה:<input id="password1" />
+        סיסמה:<input id="password1" onblur="Password()"/>
+        <progress max="4" value="0" id="progress"></progress>
         <br /> <br />
         שם פרטי:<input id="firstName" />
         <br /> <br />
         שם משפחה:<input id="lastName" />
         <br /> <br />
         <button onclick="Register()">התחברות</button>
-        
+
     </div>
 </body>
 </html>

@@ -12,8 +12,11 @@ namespace MyShop.Controllers
    
     public class UsersController : ControllerBase
     {
-        UserService service = new();
-        
+        IUserService _userService;
+        public UsersController(IUserService userService)
+        {
+            _userService = userService;
+        }
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -31,18 +34,26 @@ namespace MyShop.Controllers
         public ActionResult Login([FromQuery] string UserName, [FromQuery] string Password)
         {
 
-               User user = service.Login(UserName, Password);
+               User user = _userService.Login(UserName, Password);
                if (user!= null)
                         return Ok(user);
                return NoContent();
         }
-
+        [HttpPost("Password")]
+        public int Password([FromBody] string Password)
+        {
+            int score = _userService.Password(Password);
+            return score;
+        }
         // POST api/<UsersController>
         [HttpPost]
 
         public ActionResult Post([FromBody] User user)
         {
-            user = service.Post(user);
+            int score = Password(user.Password);
+            if (score <= 2)
+                return NoContent();
+            user = _userService.Post(user);
             return CreatedAtAction(nameof(Get), new { id = user.userId }, user);
 
         }
@@ -51,7 +62,7 @@ namespace MyShop.Controllers
         [HttpPut("{id}")]
         public ActionResult<User> Put(int id, [FromBody] User userToUpdate)
         {
-             User user=service.Put(id, userToUpdate);
+             User user= _userService.Put(id, userToUpdate);
             if (user != null)
                 return Ok(user);
             return NoContent();

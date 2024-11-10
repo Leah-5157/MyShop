@@ -92,4 +92,23 @@ const visible = () => {
     const newUser = document.querySelector(".newUser")
     newUser.classList.remove("newUser")
 }
+const Password = async() => {
+    const newUser = GetDataFromDocumentForRegister();
+    try {
+        const response = await fetch("api/Users/Password", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newUser.Password)
+        });
+        const Response = await response.json();
+        const progress = document.querySelector("#progress")
+        console.log(Response)
+        progress.value = Response;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="zxcvbn-core" Version="8.0.0-beta0002" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Repositories\Repositories.csproj" />
   </ItemGroup>
 

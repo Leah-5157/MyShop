@@ -2,7 +2,7 @@
 using Entities;
 namespace Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         public UserRepository() { }
         // GET: api/<UsersController>
@@ -13,13 +13,13 @@ namespace Repositories
         }
 
         // GET api/<UsersController>/5
-        
+
         public string Get(int id)
         {
             return "value";
         }
-        
-        public User Login( string UserName,  string Password)
+
+        public User Login(string UserName, string Password)
         {
             using (StreamReader reader = System.IO.File.OpenText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt"))
             {
@@ -35,7 +35,7 @@ namespace Repositories
         }
 
         // POST api/<UsersController>
-       
+
 
         public User Post(User user)
         {
@@ -43,12 +43,12 @@ namespace Repositories
             user.userId = numberOfUsers + 1;
             string userJson = JsonSerializer.Serialize(user);
             System.IO.File.AppendAllText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt", userJson + Environment.NewLine);
-            return( user);
+            return (user);
 
         }
 
         // PUT api/<UsersController>/5
-      
+
         public User Put(int id, User userToUpdate)
         {
             string textToReplace = string.Empty;
@@ -77,10 +77,10 @@ namespace Repositories
         }
 
         // DELETE api/<UsersController>/5
-      
+
         public void Delete(int id)
         {
         }
-    } 
+    }
 
 }
