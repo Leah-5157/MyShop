@@ -21,7 +21,7 @@ namespace Repositories
 
         public User Login(string UserName, string Password)
         {
-            using (StreamReader reader = System.IO.File.OpenText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt"))
+            using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\sarahf\\source\\repos\\MyShopDisin\\MyShop\\UserList.txt"))
             {
                 string? currentUserInFile;
                 while ((currentUserInFile = reader.ReadLine()) != null)
@@ -39,10 +39,10 @@ namespace Repositories
 
         public User Post(User user)
         {
-            int numberOfUsers = System.IO.File.ReadLines("M:\\WebApi\\MyShop\\MyShop\\UserList.txt").Count();
+            int numberOfUsers = System.IO.File.ReadLines("C:\\Users\\sarahf\\source\\repos\\MyShopDisin\\MyShop\\UserList.txt").Count();
             user.userId = numberOfUsers + 1;
             string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt", userJson + Environment.NewLine);
+            System.IO.File.AppendAllText("C:\\Users\\sarahf\\source\\repos\\MyShopDisin\\MyShop\\UserList.txt", userJson + Environment.NewLine);
             return (user);
 
         }
@@ -53,7 +53,7 @@ namespace Repositories
         {
             string textToReplace = string.Empty;
             userToUpdate.userId = id;
-            using (StreamReader reader = System.IO.File.OpenText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt"))
+            using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\sarahf\\source\\repos\\MyShopDisin\\MyShop\\UserList.txt"))
             {
                 string currentUserInFile;
                 while ((currentUserInFile = reader.ReadLine()) != null)
@@ -67,9 +67,9 @@ namespace Repositories
 
             if (textToReplace != string.Empty)
             {
-                string text = System.IO.File.ReadAllText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt");
+                string text = System.IO.File.ReadAllText("C:\\Users\\sarahf\\source\\repos\\MyShopDisin\\MyShop\\UserList.txt");
                 text = text.Replace(textToReplace, JsonSerializer.Serialize(userToUpdate));
-                System.IO.File.WriteAllText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt", text);
+                System.IO.File.WriteAllText("C:\\Users\\sarahf\\source\\repos\\MyShopDisin\\MyShop\\UserList.txt", text);
                 return userToUpdate;
             }
 
