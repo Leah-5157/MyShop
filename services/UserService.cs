@@ -38,7 +38,7 @@ namespace Services
         public User Post(User user)
         {
 
-            return _UserRepository.Post(user);
+            return _UserRepository.Post(user);// check password strength before sending to repository
 
         }
 
@@ -46,7 +46,7 @@ namespace Services
 
         public User Put(int id, User userToUpdate)
         {
-            return _UserRepository.Put(id, userToUpdate);
+            return _UserRepository.Put(id, userToUpdate);// check password strength before sending to repository
         }
         public int  Password(string Password)
         {

@@ -50,7 +50,7 @@ namespace MyShop.Controllers
 
         public ActionResult Post([FromBody] User user)
         {
-            int score = Password(user.Password);
+            int score = Password(user.Password);//put the password check in service page
             if (score <= 2)
                 return NoContent();
             user = _userService.Post(user);
