@@ -7,8 +7,8 @@ namespace Repositories
         void Delete(int id);
         IEnumerable<string> Get();
         string Get(int id);
-        User Login(string UserName, string Password);
-        User Post(User user);
-        User Put(int id, User userToUpdate);
+        Task<User> Login(string UserName, string Password);
+        Task<User> Post(User user);
+        Task Put(int id, User userToUpdate);
     }
 }

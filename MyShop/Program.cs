@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Services;
 
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddDbContext<MyShopContext>(options => options.UseSqlServer("Server = SRV2\\PUPILS; Database = My_Shop; Trusted_Connection = True; TrustServerCertificate = True"));
 builder.Services.AddControllers();
 
 var app = builder.Build();

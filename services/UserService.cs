@@ -27,26 +27,26 @@ namespace Services
             return "value";
         }
 
-        public User Login(string UserName, string Password)
+        public async Task<User> Login(string UserName, string Password)
         {
-            return _UserRepository.Login(UserName, Password);
+            return await _UserRepository.Login(UserName, Password);
         }
 
         // POST api/<UsersController>
 
 
-        public User Post(User user)
+        public async Task< User> Post(User user)
         {
 
-            return _UserRepository.Post(user);
+            return await _UserRepository.Post(user);
 
         }
 
         // PUT api/<UsersController>/5
 
-        public User Put(int id, User userToUpdate)
+        public async Task Put(int id, User userToUpdate)
         {
-            return _UserRepository.Put(id, userToUpdate);
+           await _UserRepository.Put(id, userToUpdate);
         }
         public int  Password(string Password)
         {

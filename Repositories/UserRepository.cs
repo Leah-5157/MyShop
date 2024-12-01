@@ -1,12 +1,17 @@
 ﻿using System.Text.Json;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 namespace Repositories
+
 {
     public class UserRepository : IUserRepository
     {
-        public UserRepository() { }
+        MyShopContext _myShopContext;
+        public UserRepository(MyShopContext myShopContext) {
+            _myShopContext = myShopContext;
+        }
         // GET: api/<UsersController>
-
+        
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
@@ -19,61 +24,28 @@ namespace Repositories
             return "value";
         }
 
-        public User Login(string UserName, string Password)
+        public async Task<User> Login(string UserName, string Password)
         {
-            using (StreamReader reader = System.IO.File.OpenText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.UserName == UserName && user.Password == Password)
-                        return user;
-                }
-            }
-            return null;
+           return await _myShopContext.Users.FirstOrDefaultAsync(user=>user.Password==Password);
         }
 
         // POST api/<UsersController>
 
 
-        public User Post(User user)
+        public async Task<User> Post(User user)
         {
-            int numberOfUsers = System.IO.File.ReadLines("M:\\WebApi\\MyShop\\MyShop\\UserList.txt").Count();
-            user.userId = numberOfUsers + 1;
-            string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt", userJson + Environment.NewLine);
-            return (user);
+            _myShopContext.Users.Add(user);
+            await _myShopContext.SaveChangesAsync();
+            return user;
 
         }
 
         // PUT api/<UsersController>/5
 
-        public User Put(int id, User userToUpdate)
+        public async Task Put(int id, User userToUpdate)
         {
-            string textToReplace = string.Empty;
-            userToUpdate.userId = id;
-            using (StreamReader reader = System.IO.File.OpenText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt"))
-            {
-                string currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-
-                    User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.userId == id)
-                        textToReplace = currentUserInFile;
-                }
-            }
-
-            if (textToReplace != string.Empty)
-            {
-                string text = System.IO.File.ReadAllText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt");
-                text = text.Replace(textToReplace, JsonSerializer.Serialize(userToUpdate));
-                System.IO.File.WriteAllText("M:\\WebApi\\MyShop\\MyShop\\UserList.txt", text);
-                return userToUpdate;
-            }
-
-            return null;
+            _myShopContext.Users.Update(userToUpdate);
+            await _myShopContext.SaveChangesAsync();
         }
 
         // DELETE api/<UsersController>/5

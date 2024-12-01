@@ -31,10 +31,10 @@ namespace MyShop.Controllers
             return "value";
         }
         [HttpPost("Login")]
-        public ActionResult Login([FromQuery] string UserName, [FromQuery] string Password)
+        public async Task<ActionResult> Login([FromQuery] string UserName, [FromQuery] string Password)
         {
 
-               User user = _userService.Login(UserName, Password);
+               User user = await _userService.Login(UserName, Password);
                if (user!= null)
                         return Ok(user);
                return NoContent();
@@ -48,27 +48,21 @@ namespace MyShop.Controllers
         // POST api/<UsersController>
         [HttpPost]
 
-        public ActionResult Post([FromBody] User user)
+        public async Task<ActionResult> Post([FromBody] User user)
         {
             int score = Password(user.Password);
             if (score <= 2)
                 return NoContent();
-            user = _userService.Post(user);
-            return CreatedAtAction(nameof(Get), new { id = user.userId }, user);
+            user = await _userService.Post(user);
+            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
 
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public ActionResult<User> Put(int id, [FromBody] User userToUpdate)
+        public async Task  Put(int id, [FromBody] User userToUpdate)
         {
-             User user= _userService.Put(id, userToUpdate);
-            if (user != null)
-                return Ok(user);
-            return NoContent();
-            
-
-
+            await _userService.Put(id, userToUpdate);
         }
 
         // DELETE api/<UsersController>/5
