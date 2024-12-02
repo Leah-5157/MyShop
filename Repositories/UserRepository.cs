@@ -44,6 +44,7 @@ namespace Repositories
 
         public async Task Put(int id, User userToUpdate)
         {
+            userToUpdate.Id = id;
             _myShopContext.Users.Update(userToUpdate);
             await _myShopContext.SaveChangesAsync();
         }
