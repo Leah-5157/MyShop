@@ -34,15 +34,17 @@ namespace Repositories
 
         public async Task<User> Post(User user)
         {
+            //var res= _myShopContext.Users.Add(user);
             _myShopContext.Users.Add(user);
             await _myShopContext.SaveChangesAsync();
+            //return res- the created user with the id
             return user;
 
         }
 
         // PUT api/<UsersController>/5
 
-        public async Task Put(int id, User userToUpdate)
+        public async Task Put(int id, User userToUpdate)//return user
         {
             userToUpdate.Id = id;
             _myShopContext.Users.Update(userToUpdate);
