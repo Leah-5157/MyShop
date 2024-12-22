@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using repositories;
 namespace Repositories
 
 {
@@ -10,13 +11,6 @@ namespace Repositories
         public UserRepository(MyShopContext myShopContext) {
             _myShopContext = myShopContext;
         }
-        // GET: api/<UsersController>
-        
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/<UsersController>/5
 
         public string Get(int id)
@@ -49,11 +43,7 @@ namespace Repositories
             await _myShopContext.SaveChangesAsync();
         }
 
-        // DELETE api/<UsersController>/5
 
-        public void Delete(int id)
-        {
-        }
     }
 
 }

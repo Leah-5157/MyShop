@@ -13,12 +13,7 @@ namespace Services
         public UserService(IUserRepository userRepository) {
             _UserRepository = userRepository;
         }
-        // GET: api/<UsersController>
-
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+      
 
         // GET api/<UsersController>/5
 
@@ -55,10 +50,6 @@ namespace Services
             return Result;
         }
 
-        // DELETE api/<UsersController>/5
 
-        public void Delete(int id)
-        {
-        }
     }
 }

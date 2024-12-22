@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "services\Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManageApp", "ManageApp\ManageApp.csproj", "{C0373C36-2509-40C9-A6D7-E02B5A3FE497}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{C0373C36-2509-40C9-A6D7-E02B5A3FE497}.Release|x64.Build.0 = Release|Any CPU
 		{C0373C36-2509-40C9-A6D7-E02B5A3FE497}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0373C36-2509-40C9-A6D7-E02B5A3FE497}.Release|x86.Build.0 = Release|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Debug|x64.Build.0 = Debug|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Debug|x86.Build.0 = Debug|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Release|x64.ActiveCfg = Release|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Release|x64.Build.0 = Release|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Release|x86.ActiveCfg = Release|Any CPU
+		{859682AC-DED9-4E1F-AB61-E93C9E7E11E2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,8 @@
 using System.Text.Json;
 using Entities;
 using Services;
+using DTO;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,18 +15,13 @@ namespace MyShop.Controllers
     public class UsersController : ControllerBase
     {
         IUserService _userService;
-        public UsersController(IUserService userService)
+        IMapper _mapper;
+        public UsersController(IUserService userService,IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UsersController>/5
+      
         [HttpGet("{id}")]
         public string Get(int id)
         {
@@ -33,10 +30,10 @@ namespace MyShop.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult> Login([FromQuery] string UserName, [FromQuery] string Password)
         {
-
-               User user = await _userService.Login(UserName, Password);
-               if (user!= null)
-                        return Ok(user);
+            User user = await _userService.Login(UserName, Password);
+               if (user!= null) {
+                UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
+                        return Ok(userDTO);}
                return NoContent();
         }
         [HttpPost("Password")]
@@ -48,13 +45,15 @@ namespace MyShop.Controllers
         // POST api/<UsersController>
         [HttpPost]
 
-        public async Task<ActionResult> Post([FromBody] User user)
+        public async Task<ActionResult> Post([FromBody] PostUserDTO postUserDTO)
         {
+            User user = _mapper.Map<PostUserDTO, User>(postUserDTO);
             int score = Password(user.Password);
             if (score <= 2)
                 return NoContent();
             user = await _userService.Post(user);
-            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+            UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
+            return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
 
         }
 
@@ -63,12 +62,6 @@ namespace MyShop.Controllers
         public async Task  Put(int id, [FromBody] User userToUpdate)
         {
             await _userService.Put(id, userToUpdate);
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
