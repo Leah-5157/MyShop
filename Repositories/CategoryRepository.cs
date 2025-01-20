@@ -19,6 +19,6 @@ namespace Repositories
         public async Task<List<Category>> Get()
         {
             return await _myShopContext.Categories.ToListAsync();
-        }
+            }
     }
 }
