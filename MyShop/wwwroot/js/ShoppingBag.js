@@ -32,6 +32,7 @@ const click = (product) => {
     products = JSON.parse(sessionStorage.getItem("orderItems"))
     console.log(products)
     let j = 0
+    //use indexOf instead of for loop
     for (j = 0; j < products.length; j++) {
 
         if (products[j].productId == product.productId) {
@@ -41,7 +42,7 @@ const click = (product) => {
     }
     products.splice(j, 1)
     sessionStorage.setItem("orderItems", JSON.stringify(products))
-    window.location.href = "ShoppingBag.html"
+    window.location.href = "ShoppingBag.html"//why? and if, why do you need the next line- it won't happen
     //document.getElementById("items").innerHTML = ""
     getOrderProducts()
 }
@@ -56,15 +57,15 @@ const setOrderItem = async () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newUser)
+            body: JSON.stringify(newUser)//?
         });
         console.log(response)
         if (!response.ok) {
             console.log(`HTTP error! status:${newUser.status}`)
-            alert("שם משתמש או סיסמה אינם תקינים")
+            alert("שם משתמש או סיסמה אינם תקינים")//?
         }
         else
-            alert("New user!")
+            alert("New user!")//?
     } catch (error) {
         console.log(error)
     }
@@ -101,7 +102,7 @@ const placeOrder = async () => {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
-                OrderDate: "2025-01-05",
+                OrderDate: "2025-01-05",//?
                 OrderSum: sum,
                 UserId: user,             
                 orderItems: products
