@@ -7,6 +7,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using repositories;
 
+
 namespace Repositories
 {
     public class CategoryRepository : ICategoryRepository

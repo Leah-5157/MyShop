@@ -50,7 +50,7 @@ namespace MyShop.Controllers
             User user = _mapper.Map<PostUserDTO, User>(postUserDTO);
             int score = Password(user.Password);
             if (score <= 2)
-                return NoContent();
+                return BadRequest();
             user = await _userService.Post(user);
             UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
             return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
@@ -58,11 +58,29 @@ namespace MyShop.Controllers
         }
 
         // PUT api/<UsersController>/5
+        //[HttpPut("{id}")]
+        //public async Task  Put(int id, [FromBody] PostUserDTO userToUpdate)
+        //{
+        //    await _userService.Put(id,_mapper.Map<PostUserDTO, User>(userToUpdate));
+
+        //}
+        // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public async Task  Put(int id, [FromBody] PostUserDTO userToUpdate)
+        public async Task<ActionResult> Put(int id, [FromBody] PostUserDTO userToUpdateDTO)
+
         {
-           await _userService.Put(id,_mapper.Map<PostUserDTO, User>(userToUpdate));
-           
+
+            User user = _mapper.Map<PostUserDTO, User>(userToUpdateDTO);
+
+            int score = Password(user.Password);
+            if (score <= 2)
+                return BadRequest();
+
+            await _userService.Put(id, user);
+            UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
+
+            return Ok(userDTO);
+
         }
     }
 }
