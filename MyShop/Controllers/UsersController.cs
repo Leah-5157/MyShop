@@ -57,14 +57,6 @@ namespace MyShop.Controllers
 
         }
 
-        // PUT api/<UsersController>/5
-        //[HttpPut("{id}")]
-        //public async Task  Put(int id, [FromBody] PostUserDTO userToUpdate)
-        //{
-        //    await _userService.Put(id,_mapper.Map<PostUserDTO, User>(userToUpdate));
-
-        //}
-        // PUT api/<UsersController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] PostUserDTO userToUpdateDTO)
 

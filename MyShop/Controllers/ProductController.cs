@@ -2,6 +2,7 @@
 using DTO;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,18 +15,31 @@ namespace MyShop.Controllers
     {
         IProductService _ProductService;
         IMapper _Mapper;
-        public ProductController(IProductService ProductService, IMapper mapper)
+        private readonly IMemoryCache _cache;
+        public ProductController(IProductService ProductService, IMapper mapper, IMemoryCache cache)
         {
             _ProductService = ProductService;
             _Mapper = mapper;
+            _cache = cache;
         }
         // GET: api/<ProductController>
         [HttpGet]
         public async Task<IEnumerable<ProductDTO>> Get([FromQuery] string? desc, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] int?[] categoryIds)
         {
-            
-            IEnumerable<Product> products= await _ProductService.Get(desc,minPrice, maxPrice,categoryIds);
-            IEnumerable<ProductDTO> productDTOs = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
+            string cacheKey = $"products_{desc}_{minPrice}_{maxPrice}_{string.Join(",", categoryIds)}";
+
+            if (!_cache.TryGetValue(cacheKey, out IEnumerable<ProductDTO> productDTOs))
+            {
+                IEnumerable<Product> products = await _ProductService.Get(desc, minPrice, maxPrice, categoryIds);
+                productDTOs = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(10)) // נמחק מהקאש אם לא היה שימוש ב-10 דקות
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(1)); // נמחק מהקאש אחרי שעה בכל מקרה
+
+                _cache.Set(cacheKey, productDTOs, cacheEntryOptions);
+            }
+
             return productDTOs;
         }
     }

@@ -14,12 +14,12 @@ namespace Test
     public class UserReposetoryIntegrationTests : IClassFixture<DatabaseFixure>
     {
         private readonly MyShopContext _context;
-        private readonly UserRepository _reposetory;
+        private readonly UserRepository _repository;
 
         public UserReposetoryIntegrationTests(DatabaseFixure fixture)
         {
             _context = fixture.Context;
-            _reposetory = new UserRepository(_context);
+            _repository = new UserRepository(_context);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Test
 
             // Act
 
-            var retrievedUser = await _reposetory.Login(user.UserName,user.Password);
+            var retrievedUser = await _repository.Login(user.UserName,user.Password);
 
             // Assert
             Assert.NotNull(retrievedUser);
@@ -46,7 +46,7 @@ namespace Test
         {
             // Act
             //var retrievedUser = await _context.Users.FindAsync(-1); // מזהה לא קיים
-            var retrievedUser = await _reposetory.Login("-1","1");
+            var retrievedUser = await _repository.Login("-1","1");
             // Assert
             Assert.Null(retrievedUser);
         }
@@ -59,7 +59,7 @@ namespace Test
 
             // Act
             // var addedUser = await _context.Users.AddAsync(user);
-            var addedUser = await _reposetory.Post(user);
+            var addedUser = await _repository.Post(user);
 
 
             //await _context.SaveChangesAsync();
@@ -79,7 +79,7 @@ namespace Test
 
             // Act
              
-            var loggedInUser = await _reposetory.Login("testuser@example.com", "1password123");
+            var loggedInUser = await _repository.Login("testuser@example.com", "1password123");
             // Assert
             Assert.Null(loggedInUser);
        
@@ -89,7 +89,7 @@ namespace Test
         public async Task Login_ShouldReturnNull_WhenCredentialsAreInvalid()
         {
             // Act
-            var loggedInUser = await _reposetory.Login("Ttestuser@example.com", "securepassword");
+            var loggedInUser = await _repository.Login("Ttestuser@example.com", "securepassword");
 
             // Assert
             Assert.Null(loggedInUser);

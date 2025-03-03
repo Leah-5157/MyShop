@@ -25,8 +25,8 @@ namespace TestProject
 
             var orders = new List<Order> { order };
 
-            var mockContext = new Mock<MyShopContext>(); // יצירת Mock ל-DbContext
-            mockContext.Setup(x => x.Orders).ReturnsDbSet(orders); // החזרת DbSet מזויף
+            var mockContext = new Mock<MyShopContext>();
+            mockContext.Setup(x => x.Orders).ReturnsDbSet(orders); 
 
             var orderRepository = new OrderRepository(mockContext.Object);
 
@@ -47,10 +47,10 @@ namespace TestProject
                 User = new User { Id = 1, UserName = "Leah" }
             };
 
-            var orders = new List<Order> { }; // רשימה ריקה המדמה את מסד הנתונים
+            var orders = new List<Order> { }; 
 
-            var mockContext = new Mock<MyShopContext>(); // יצירת Mock ל-DbContext
-            mockContext.Setup(x => x.Orders).ReturnsDbSet(orders); // החזרת DbSet מזויף
+            var mockContext = new Mock<MyShopContext>();
+            mockContext.Setup(x => x.Orders).ReturnsDbSet(orders);
 
             var orderRepository = new OrderRepository(mockContext.Object);
 
