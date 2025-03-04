@@ -73,7 +73,6 @@ Traffic is monitored and logged in a dedicated table for analytical purposes wit
 
 ### Security
 
-* The project enforces HTTPS for secure communication.
 * Password strength is validated using zxcvbn to ensure strong passwords.
 * Product prices are always retrieved from the database to ensure accuracy and prevent inconsistencies.
 
