@@ -45,7 +45,7 @@ To ensure scalability, all functions are implemented using asynchronous programm
 
 ### Data Input
 
-Data input is handled in a separate project. You can find more details and access it here: https://github.com/rachel-8511/final-project-webApi-manager
+Data input is handled in a separate project. You can find more details and access it here: https://github.com/Leah-5157/MyShop/tree/master/ManageApp
 
 ### Documentation
 
