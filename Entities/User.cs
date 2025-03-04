@@ -10,7 +10,7 @@ public partial class User
     public string UserName { get; set; } = null!;
     [StringLength(12, ErrorMessage = "password must be between 8 till 12 tags", MinimumLength = 8), Required]
     public string Password { get; set; } = null!;
-
+    [Required]
     public string FirstName { get; set; } = null!;
 
     public string? LastName { get; set; }

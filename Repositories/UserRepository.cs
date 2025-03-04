@@ -28,10 +28,14 @@ namespace Repositories
 
         public async Task<User> Post(User user)
         {
-            _myShopContext.Users.Add(user);
-            await _myShopContext.SaveChangesAsync();
-            return user;
-
+            var item = _myShopContext.Users.ToList().Find((item => item.UserName.Trim() == user.UserName));
+            if (item == null)
+            {
+                _myShopContext.Users.Add(user);
+                await _myShopContext.SaveChangesAsync();
+                return user;
+            }
+            return null;
         }
 
         // PUT api/<UsersController>/5

@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.Extensions.Logging;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,12 @@ namespace Services
     {
         IOrderRepository _OrderRepository;
         IProductRepository _ProductRepository;
-        public OrderService(IOrderRepository OrderRepository, IProductRepository productRepository)
+        ILogger<OrderService> _logger;
+        public OrderService(IOrderRepository OrderRepository, IProductRepository productRepository, ILogger<OrderService> logger)
         {
             _OrderRepository = OrderRepository;
             _ProductRepository = productRepository;
+            _logger = logger;
         }
 
         public async Task<Order> GetByID(int id)
@@ -25,8 +28,12 @@ namespace Services
 
 
         public async Task<Order> Post(Order order)
-        {           
-            order.OrderSum = await CheckSum(order);
+        {     
+            decimal amount = await CheckSum(order);
+            if (amount != order.OrderSum) {
+                _logger.LogCritical($"{order.UserId} tried to change the order sum");
+                order.OrderSum = amount;
+            }
             return await _OrderRepository.Post(order);
         }
 

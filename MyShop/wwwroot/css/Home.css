@@ -1,0 +1,234 @@
+﻿@import url("https://fonts.googleapis.com/css?family=Heebo:900|Roboto|Satisfy&display=swap");
+
+body {
+    margin: 0;
+    background-color: #000000;
+    font-family: "Roboto", sans-serif;
+}
+
+.Header__container {
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 5em;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1em 5vw;
+    width: 100%;
+}
+
+.Header__left {
+    display: flex;
+    flex-direction: row;
+    font-family: "Satisfy", cursive;
+}
+
+.Header__logo {
+    width: 4.5em;
+    margin: auto;
+}
+
+.Header__title {
+    display: flex;
+    margin-left: 0.6em;
+}
+
+h1 {
+    font-weight: normal;
+    margin: 0.1em;
+}
+
+a {
+    text-decoration: none; /* Remove the underline */
+    color: white; /* Set the text color to white */
+}
+
+.Header__menu {
+    margin: auto 0;
+    display: flex;
+    flex-direction: row;
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+.Header__menuItem {
+    list-style-type: none;
+    margin: auto 1em;
+}
+
+.Hero {
+    color: white;
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.Hero__content {
+    margin: 40vh auto auto 10vw;
+    width: 50%;
+}
+
+.Hero__title {
+    font-family: "Heebo", sans-serif;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 0px 0px 8px rgb(0, 0, 0);
+    font-size: 3em;
+    line-height: 1em;
+}
+
+.Hero__subtitle {
+    opacity: 0.85;
+    margin-top: 0.5em;
+    text-shadow: 0px 0px 8px black;
+    font-size: 1.5em;
+}
+
+.Hero__action {
+    height: 2em;
+    border-radius: 2em;
+    background-color: #c49000;
+    color: white;
+    border: none;
+    padding: 0.4em 2em;
+    box-shadow: 0px 0px 8px black;
+    position: relative;
+    width: 7em;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .Hero__content {
+        width: 90%;
+        margin: 40vh 2em auto 2em;
+    }
+}
+
+.Hero__action:hover {
+    animation: callToAction 1500ms ease-in infinite;
+}
+
+@keyframes callToAction {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.07);
+    }
+
+    50% {
+        transform: scale(1.04);
+    }
+
+    60% {
+        transform: scale(1.07);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.Hero__actionText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    font-family: "Heebo", sans-serif;
+    font-size: 1.1em;
+    transform: translate(-50%, -50%);
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.2);
+}
+
+@media (max-height: 500px) {
+    .Hero__title {
+        font-size: 2em;
+    }
+
+    .Hero__subtitle {
+        font-size: 1em;
+    }
+
+    .Hero__action {
+        height: 1.4em;
+        border-radius: 1.4em;
+        width: 4.5em;
+    }
+
+    .Hero__actionText {
+        font-size: 0.9em;
+    }
+}
+
+
+
+/* CSS */
+.button-89 {
+    --b: 3px; /* border thickness */
+    --s: .45em; /* size of the corner */
+    --color: #D08C91;
+    padding: calc(.5em + var(--s)) calc(.9em + var(--s));
+    color: var(--color);
+    --_p: var(--s);
+    background: conic-gradient(from 90deg at var(--b) var(--b),#0000 90deg,var(--color) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+    transition: .3s linear, color 0s, background-color 0s;
+    outline: var(--b) solid #0000;
+    outline-offset: .6em;
+    font-size: 16px;
+    margin-right: 20px;
+    border: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+    .button-89:hover,
+    .button-89:focus-visible {
+        --_p: 0px;
+        outline-color: var(--color);
+        outline-offset: .05em;
+    }
+
+    .button-89:active {
+        background: var(--color);
+        color: #fff;
+    }
+
+
+.Hero__image {
+    display: inline-block;
+    position: absolute;
+    z-index: -10;
+    height: 100vh;
+    width: 100%;
+    /* background-color: red; */
+    /* background-image: url('a.jpg'); */
+
+    background-position: center;
+    background-size: cover;
+}
+
+.Hero__mask {
+    position: absolute;
+    z-index: -8;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(#180047, #060231 50%);
+    mix-blend-mode: multiply;
+    opacity: 0.5;
+}
+
+.Hero__snowfall {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -6;
+    opacity: 0.75;
+}

@@ -4,12 +4,14 @@ const GetDataFromDocumentForRegister = () => {
     const Password = document.querySelector("#password1").value;
     const FirstName = document.querySelector("#firstName").value;
     const LastName = document.querySelector("#lastName").value;
+
+
     return ({ UserName, Password, FirstName, LastName });
 }
 const Register = async() => {
     const newUser = GetDataFromDocumentForRegister();
     try {
-        
+
         const response = await fetch("../api/Users", {
             method: 'POST',
             headers: {
@@ -18,14 +20,19 @@ const Register = async() => {
             body: JSON.stringify(newUser)
         });
         console.log(response)
-        if (!response.ok) { 
+        if (!response.ok) {
             console.log(`HTTP error! status:${newUser.status}`)
-            alert("שם משתמש או סיסמה אינם תקינים") }
-      else
-           alert("New user!")
+            alert("בדוק את תקינות השדות!")
+        }
+        else {
+            alert("New user!")
+            window.location.href = 'ShoppingBag.html'
+        }
+           
     } catch (error) {
         console.log(error)
     }
+
 }
 const GetDataFromDocumentForLogin = () => {
     const UserName = document.querySelector("#userName").value;
@@ -54,31 +61,30 @@ const Login = async () => {
         else
           alert("conected!!")
         sessionStorage.setItem("id", data.id)
-        window.location.href = 'Update.html'
+        window.location.href = 'ShoppingBag.html'
 
     } catch (error) {
         alert("try again")
         console.log(error)
     }
-
 }
 
 const Update = async () => {
     const newDetails = GetDataFromDocumentForRegister();
     try {
 
-        const responsePut = await fetch(`../api/Users/${sessionStorage.getItem("id")}`, {
+        const responsePut = await fetch(`../api/Users/${sessionStorage.getItem('id')}`, {
             method: "PUT",
             headers: {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(newDetails)
-           
-
+     
         });
         const dataPut = await responsePut.json
-        if (!responsePut.ok)
+        if (!responsePut.ok) { 
             alert("try again")
+        }
         else {
             alert("פרטים עודכנו בהצלחה!")
         }
@@ -93,23 +99,23 @@ const visible = () => {
     const newUser = document.querySelector(".newUser")
     newUser.classList.remove("newUser")
 }
+
 const Password = async() => {
     const newUser = GetDataFromDocumentForRegister();
     try {
-        const response = await fetch("../api/Users/Password", {
+        const response = await fetch("../api/Users/password", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newUser.Password)
         });
-        const Response = await response.json();
-        const progress = document.querySelector("#progress")
-        console.log(Response)
-        progress.value = Response;
+        console.log(response)
+        const data = await response.json();
+        const progress = document.querySelector("#progress");
+             progress.value = data;
+      
     } catch (error) {
         console.log(error)
     }
 }
-
-

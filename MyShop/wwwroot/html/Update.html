@@ -3,26 +3,24 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <script defer src="../js/Login.js"></script>
+    <link href="../CSS/Login.css" rel="stylesheet" />
+    <script defer src="/JS/Login.js"></script>
 
 </head>
 <body dir="rtl">
-    <div>
+    <div class="card">
         <h1>עדכון פרטים:</h1>
         <br /> <br />
-        שם משתמש:<input id="userName1" />
+        שם משתמש:<input id="userName1" required/>
         <br /> <br />
-        סיסמה:<input id="password1" onblur="Password()" />
-        <progress max="4" value="0" id="progress"></progress>
+        סיסמה:<input id="password1" onblur="Password()"required />
+        <progress id="progress" max="4" value="0"></progress>
         <br /> <br />
-        שם פרטי:<input id="firstName" />
+        שם פרטי:<input id="firstName" required />
         <br /> <br />
         שם משפחה:<input id="lastName" />
         <br /> <br />
-        <button onclick="Update()">אישור</button>
-
-
-
+        <button type="submit" onclick="Update()">אישור</button>
     </div>
 </body>
 </html>

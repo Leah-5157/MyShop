@@ -34,7 +34,7 @@ namespace MyShop.Controllers
                 orderDTO = _mapper.Map<Order, OrderDTO>(order);
 
                 var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(10)); // קובע זמן תפוגה לקאש
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(10)); 
 
                 _cache.Set($"Order_{id}", orderDTO, cacheOptions);
             }

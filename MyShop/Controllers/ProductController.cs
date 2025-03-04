@@ -15,12 +15,15 @@ namespace MyShop.Controllers
     {
         IProductService _ProductService;
         IMapper _Mapper;
+        ILogger<ProductController> _logger;
         private readonly IMemoryCache _cache;
-        public ProductController(IProductService ProductService, IMapper mapper, IMemoryCache cache)
+        public ProductController(IProductService ProductService, IMapper mapper, IMemoryCache cache, ILogger<ProductController> logger)
         {
             _ProductService = ProductService;
             _Mapper = mapper;
             _cache = cache;
+            _logger = logger;
+            _logger.LogInformation("Someone enter to the application");
         }
         // GET: api/<ProductController>
         [HttpGet]
@@ -34,8 +37,8 @@ namespace MyShop.Controllers
                 productDTOs = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(10)) // נמחק מהקאש אם לא היה שימוש ב-10 דקות
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1)); // נמחק מהקאש אחרי שעה בכל מקרה
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(10)) 
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(1)); 
 
                 _cache.Set(cacheKey, productDTOs, cacheEntryOptions);
             }

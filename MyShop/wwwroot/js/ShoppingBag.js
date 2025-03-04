@@ -17,7 +17,7 @@ const getOrderProducts = async () => {
 const drawItem = async (product) => {
     let tmp = document.getElementById("temp-row");
     let cloneProduct = tmp.content.cloneNode(true)
-    let url = `../Image/${product.imgUrl}`
+    let url = `../img/${product.imgUrl}`
     cloneProduct.querySelector(".image").style.backgroundImage = `url(${url})`
     cloneProduct.querySelector(".itemName").textContent = product.productName
     cloneProduct.querySelector(".price").innerText = product.price
@@ -28,9 +28,7 @@ const drawItem = async (product) => {
 }
 
 const click = (product) => {
-    console.log(product.productId)
     products = JSON.parse(sessionStorage.getItem("orderItems"))
-    console.log(products)
     let j = 0
     for (j = 0; j < products.length; j++) {
 
@@ -58,7 +56,6 @@ const setOrderItem = async () => {
             },
             body: JSON.stringify(newUser)
         });
-        console.log(response)
         if (!response.ok) {
             console.log(`HTTP error! status:${newUser.status}`)
             alert("שם משתמש או סיסמה אינם תקינים")
@@ -81,8 +78,6 @@ const generateDate = () => {
 
 const placeOrder = async () => {
     let user = JSON.parse(sessionStorage.getItem("id")) || null
-    console.log("user")
-    console.log(user)
     if (user == null)
         window.location.href = 'Login.html'
     let shoppingBag = JSON.parse(sessionStorage.getItem("orderItems")) || []
@@ -93,7 +88,6 @@ const placeOrder = async () => {
         sum += shoppingBag[i].price
         products.push(thisProduct)
     }
-    console.log(products)
     try {
         const orderPost = await fetch("../api/Order", {
             method: "POST",
@@ -112,14 +106,11 @@ const placeOrder = async () => {
         if (!orderPost.ok)
             throw new Error(`HTTP error! status:${orderPost.status}`);
         const data = await orderPost.json();
-        console.log("PPPPPPPPPP")
-        console.log(data)
         alert(`number order ${data.orderId} secssed`)
         sessionStorage.setItem("orderItems", JSON.stringify([]))
         window.location.href = 'Products.html'
     }
     catch (error) {
-        alert("try again" + error)
         console.log(error)
     }
 

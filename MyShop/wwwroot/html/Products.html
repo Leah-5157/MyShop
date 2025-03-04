@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <script src="../js/products.js"></script>
-    <link href="../css/Products.css" rel="stylesheet" />
+   <script src="../JS/Products.js"></script>
+    <link href="../CSS/Products.css" rel="stylesheet" />
 
     <meta charset="utf-8" />
     <title></title>
@@ -14,13 +14,13 @@
             <h1></h1>
             <p class="price"></p>
             <p class="description"></p>
-            <p ><button id="bag">הוסף לסל</button></p>
+            <p><button id="bag">הוסף לסל</button></p>
         </div>
     </template>
     <template id="temp-category">
         <div class="cb checkbox">
-            <input type="checkbox" class="opt" id="checkbox" value="checkbox">
-            <label for="">
+            <input type="checkbox" class="opt" id="" value="">
+            <label for="">F
                 <span class="OptionName"></span>
                 <span class="Count"></span>
                 </a>
@@ -35,15 +35,20 @@
 
             <section class="QuickLinks">
                 <ul>
+
                     <li class="" data-section="myAccount">
-                        <a href="#" title="כניסה לצפייה בפרטי החשבון"  onclick="TrackLinkID(this);"  accesskey="h">החשבון שלי</a>
+                        <a href="#" title="כניסה לצפייה בפרטי החשבון" onclick="TrackLinkID(this);" accesskey="h">החשבון שלי</a>
                     </li>
+
                     <li>
                         <a href="#" title="קניה מהירה">קניה מהירה</a>
                     </li>
                     <li>
-                        <a href="#" title="עזרה - שאלות נפוצות, כיצד לקנות באינטרנט, מדריך ועוד"  target="_blank">עזרה</a>
-                    </li>  
+                        <a href="#" title="עזרה - שאלות נפוצות, כיצד לקנות באינטרנט, מדריך ועוד" target="_blank">עזרה</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="UpdateUser()" title="עידכון פרטי משתמש">עדכון פרטי משתמש</a>
+                    </li>
                 </ul>
             </section>
 
@@ -85,7 +90,7 @@
             <input type="text" id="nameSearch" class="floatRight" placeholder="חיפוש לפי שם מוצר">
 
             <button class="floatRight" tabindex="0" onclick="filterProducts()">
-                <span class="header42"><img src="../img/searchIcon.svg" alt="סמל חיפוש"></span>
+                <span class="header42"><img src="/img/searchIcon.svg" alt="סמל חיפוש"></span>
             </button>
         </div>
         <div id="priceRangeFilter" class="filterBreak">
@@ -97,7 +102,7 @@
             <input type="text" maxlength="9" id="maxPrice" class="priceInputText">
             <span class="priceCurrency">₪</span>
             <button onclick="filterProducts()">
-                <span><img src="../img/searchIcon.svg" alt="סמל חיפוש"></span>
+                <span><img src="/img/searchIcon.svg" alt="סמל חיפוש"></span>
             </button>
         </div>
     </div>

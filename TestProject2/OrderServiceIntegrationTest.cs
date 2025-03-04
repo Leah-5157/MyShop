@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using repositories;
 using Repositories;
 using Services;
@@ -22,7 +23,8 @@ namespace TestProject
         public OrderServiceIntegrationTest(DatabaseFixure fixture)
         {
             _context = fixture.Context;
-            _repository = new OrderService(new OrderRepository(_context), new ProductRepository(_context));
+            var logger = NullLogger<OrderService>.Instance; 
+            _repository = new OrderService(new OrderRepository(_context), new ProductRepository(_context),logger);
         }
 
 
@@ -30,12 +32,11 @@ namespace TestProject
         [Fact]
         public async Task Post_ShouldSaveOrder_WithCorrectTotalAmount()
         {
-            // Arrange: יצירת קטגוריה עבור המוצרים (כי יש Foreign Key)
+            //Arrange
             var category = new Category { CategoryName = "Electronics" };
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
-            // יצירת מוצרים עם קטגוריה תקפה
             var product1 = new Product { ProductName = "Laptop", Price = 10, ImgUrl = "laptop.jpg", Category = category };
             var product2 = new Product { ProductName = "Phone", Price = 20, ImgUrl = "phone.jpg", Category = category };
             var product3 = new Product { ProductName = "Tablet", Price = 15, ImgUrl = "tablet.jpg", Category = category };
@@ -43,16 +44,14 @@ namespace TestProject
             _context.Products.AddRange(product1, product2, product3);
             await _context.SaveChangesAsync();
 
-            // יצירת משתמש (כי UserId חובה בהזמנה)
             var user = new User { UserName = "test@example.com", Password = "password123", FirstName = "John", LastName = "Doe" };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // יצירת הזמנה עם מוצרים תקפים ו-UserId
             var order = new Order
             {
                 OrderDate = DateTime.UtcNow,
-                OrderSum = 0,  // יחושב ע"י CheckSum
+                OrderSum = 0,  
                 UserId = user.Id,
                 OrderItems = new List<OrderItem>
             {
@@ -62,14 +61,14 @@ namespace TestProject
             }
             };
 
-            // Act: שליחת ההזמנה לפונקציה הנבדקת
+            // Act: 
             var savedOrder = await _repository.Post(order);
 
-            // Assert: בדיקת תקינות הנתונים
+            // Assert: 
             Assert.NotNull(savedOrder);
-            Assert.Equal(45, savedOrder.OrderSum); // 10.5 + 20.0 + 15.75
-            Assert.Equal(3, savedOrder.OrderItems.Count); // 3 מוצרים בהזמנה
-            Assert.Equal(user.Id, savedOrder.UserId); // בדיקה שהמשתמש משויך להזמנה
+            Assert.Equal(45, savedOrder.OrderSum); 
+            Assert.Equal(3, savedOrder.OrderItems.Count); 
+            Assert.Equal(user.Id, savedOrder.UserId); 
         }
     }
 }

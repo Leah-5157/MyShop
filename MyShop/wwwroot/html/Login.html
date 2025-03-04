@@ -1,39 +1,40 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    
+    <link href="../CSS/Login.css" rel="stylesheet" />
+    <script defer src="/JS/Login.js"></script>
     <meta charset="utf-8" />
     <title></title>
-    <script defer src="../js/Login.js" ></script>
-    <link href="../css/Login.css" rel="stylesheet"/>
 </head>
 <body dir="rtl">
-    <div>
-        <h1> Hi!!!!!!!!!!!!!!!!!!!!!!!!!</h1>
+    <div class="card">
+        
+        <h1>כניסת משתמש</h1>
         <br /> <br />
-        שם משתמש:<input id="userName"/>
+        שם משתמש:<input id="userName"required />
         <br /> <br />
-        סיסמה:<input id="password"/>
+        סיסמה:<input id="password" required/>
+        
         <br /> <br />
-        <button onclick="Login()">התחברות</button>
+        <button onclick="Login()" type="submit">התחברות</button>
         <br /> <br />
         <button onclick="visible()">משתמש חדש</button>
         <br /> <br /> <br /> <br /> <br /> <br />
     </div>
-    <div class="newUser">
+    <div class="newUser card">
         <h1>משתמש חדש:</h1>
         <br /> <br />
-        שם משתמש:<input id="userName1" />
+        שם משתמש:<input id="userName1" required/>
         <br /> <br />
-        סיסמה:<input id="password1" onblur="Password()"/>
-        <progress max="4" value="0" id="progress"></progress>
+        סיסמה:<input id="password1" onblur="Password()" required/>
+        <progress id="progress" max="4" value="0"></progress>
         <br /> <br />
-        שם פרטי:<input id="firstName" />
+        שם פרטי:<input id="firstName" required />
         <br /> <br />
         שם משפחה:<input id="lastName" />
         <br /> <br />
-        <button onclick="Register()">התחברות</button>
-
+        <button type="submit" onclick="Register()">רישום</button>
+        
     </div>
 </body>
 </html>
