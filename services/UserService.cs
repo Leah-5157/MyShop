@@ -45,6 +45,7 @@ namespace Services
         }
         public int  Password(string Password)
         {
+            //you can write in in 1 line- return Zxcvbn.Core.EvaluatePassword(Password).Score
             var result = Zxcvbn.Core.EvaluatePassword(Password);
             int Result = result.Score;
             return Result;
