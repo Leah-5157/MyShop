@@ -2,8 +2,9 @@
 using DTO;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using Services;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,8 +17,8 @@ namespace MyShop.Controllers
         IProductService _ProductService;
         IMapper _Mapper;
         ILogger<ProductController> _logger;
-        private readonly IMemoryCache _cache;
-        public ProductController(IProductService ProductService, IMapper mapper, IMemoryCache cache, ILogger<ProductController> logger)
+        private readonly IDistributedCache _cache;
+        public ProductController(IProductService ProductService, IMapper mapper, IDistributedCache cache, ILogger<ProductController> logger)
         {
             _ProductService = ProductService;
             _Mapper = mapper;
@@ -30,20 +31,24 @@ namespace MyShop.Controllers
         public async Task<IEnumerable<ProductDTO>> Get([FromQuery] string? desc, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] int?[] categoryIds)
         {
             string cacheKey = $"products_{desc}_{minPrice}_{maxPrice}_{string.Join(",", categoryIds)}";
-
-            if (!_cache.TryGetValue(cacheKey, out IEnumerable<ProductDTO> productDTOs))
+            IEnumerable<ProductDTO>? productDTOs = null;
+            var cached = await _cache.GetStringAsync(cacheKey);
+            if (cached != null)
+            {
+                productDTOs = JsonSerializer.Deserialize<IEnumerable<ProductDTO>>(cached);
+            }
+            else
             {
                 IEnumerable<Product> products = await _ProductService.Get(desc, minPrice, maxPrice, categoryIds);
                 productDTOs = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(10)) 
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1)); 
-
-                _cache.Set(cacheKey, productDTOs, cacheEntryOptions);
+                var options = new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromMinutes(10),
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
+                };
+                await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(productDTOs), options);
             }
-
-            return productDTOs;
+            return productDTOs ?? Enumerable.Empty<ProductDTO>();
         }
     }
 }

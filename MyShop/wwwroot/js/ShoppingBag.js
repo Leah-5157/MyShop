@@ -2,15 +2,15 @@
     getOrderProducts()
     let sum = 0
     let items = JSON.parse(sessionStorage.getItem("orderItems"))
-    document.getElementById("itemCount").textContent = items.length
-    for (let i = 0; i < items.length; i++) {
+    document.getElementById("itemCount").textContent = items?.length
+    for (let i = 0; i < items?.length; i++) {
         sum += items[i].price
     }
     document.getElementById("totalAmount").textContent = sum
 })
 const getOrderProducts = async () => {
     products = JSON.parse(sessionStorage.getItem("orderItems"))
-    for (let i = 0; i < products.length; i++) {
+    for (let i = 0; i < products?.length; i++) {
         drawItem(products[i])
     }
 }
@@ -30,7 +30,7 @@ const drawItem = async (product) => {
 const click = (product) => {
     products = JSON.parse(sessionStorage.getItem("orderItems"))
     let j = 0
-    for (j = 0; j < products.length; j++) {
+    for (j = 0; j < products?.length; j++) {
 
         if (products[j].productId == product.productId) {
 
@@ -83,7 +83,7 @@ const placeOrder = async () => {
     let shoppingBag = JSON.parse(sessionStorage.getItem("orderItems")) || []
     let products = []
     let sum = 0
-    for (let i = 0; i < shoppingBag.length; i++) {
+    for (let i = 0; i < shoppingBag?.length; i++) {
         let thisProduct = { ProductId: shoppingBag[i].productId, Quentity: 1 };
         sum += shoppingBag[i].price
         products.push(thisProduct)

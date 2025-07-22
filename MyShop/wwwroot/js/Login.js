@@ -1,5 +1,4 @@
-﻿
-const GetDataFromDocumentForRegister = () => {
+﻿const GetDataFromDocumentForRegister = () => {
     const UserName = document.querySelector("#userName1").value;
     const Password = document.querySelector("#password1").value;
     const FirstName = document.querySelector("#firstName").value;
@@ -43,26 +42,23 @@ const GetDataFromDocumentForLogin = () => {
 const Login = async () => {
     const existUser = GetDataFromDocumentForLogin();
     try {
-        const loginPost = await fetch(`../api/Users/Login?UserName=${existUser.UserName}&Password=${existUser.Password}`, {
+        const loginPost = await fetch("../api/Users/Login", {
             method: "POST",
             headers: {
-                'Content-type': 'application/json'
+                'Content-Type': 'application/json'
             },
-            query: {
-                UserName: existUser.UserName,
-                Password: existUser.Password
-            }
+            body: JSON.stringify(existUser)
         });
         const data = await loginPost.json();
         console.log(data)
         if (!loginPost.ok) {
             throw new Error(`HTTP error! status:${loginPost.status}`);
         }
-        else
-          alert("conected!!")
-        sessionStorage.setItem("id", data.id)
-        window.location.href = 'ShoppingBag.html'
-
+        else {
+            alert("conected!!")
+            sessionStorage.setItem("id", data.id)
+            window.location.href = 'ShoppingBag.html'
+        }
     } catch (error) {
         alert("try again")
         console.log(error)

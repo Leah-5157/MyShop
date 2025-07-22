@@ -18,9 +18,19 @@ namespace Repositories
             return "value";
         }
 
+        public async Task<string?> GetSaltByUserName(string userName)
+        {
+            var user = await _myShopContext.Users
+                .Where(u => u.UserName == userName)
+                .Select(u => u.Salt)
+                .FirstOrDefaultAsync();
+            return user;
+        }
+
         public async Task<User> Login(string UserName, string Password)
         {
-           return await _myShopContext.Users.FirstOrDefaultAsync(user=>user.Password==Password);
+            // Only fetch by username, let service verify password
+            return await _myShopContext.Users.FirstOrDefaultAsync(user => user.UserName == UserName && user.Password == Password);
         }
 
         // POST api/<UsersController>

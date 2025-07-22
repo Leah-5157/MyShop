@@ -22,26 +22,19 @@ namespace Manager
                 Console.WriteLine("Continue?");
                 toContinue = Console.ReadLine();
 
-                string query = "INSERT INTO Categories(Category)" +
-                          "VALUES(@categoryName)";
+                string query = "INSERT INTO Categories(CategoryName) VALUES(@categoryName)";
 
                 using (SqlConnection cn = new SqlConnection(connectionString))
-
                 using (SqlCommand cmd = new SqlCommand(query, cn))
                 {
-                    cmd.Parameters.Add("@categoryName", SqlDbType.VarChar).Value = categoryName;
-
+                    cmd.Parameters.Add("@categoryName", SqlDbType.NVarChar, 50).Value = categoryName;
                     cn.Open();
                     rowsAffected = cmd.ExecuteNonQuery();
                     cn.Close();
-
-
                 }
             }
             return rowsAffected;
-
         }
-
 
         public int InsertProduct(string connectionString)
         {
@@ -49,41 +42,36 @@ namespace Manager
             string toContinue = "y";
             while (toContinue == "y")
             {
-
-                string category_ID, productName, productDescription, price, imagePath;
+                string categoryID, productName, description, price, imgUrl;
                 Console.WriteLine("Insert category ID");
-                category_ID = Console.ReadLine();
+                categoryID = Console.ReadLine();
                 Console.WriteLine("Insert product name");
                 productName = Console.ReadLine();
-                Console.WriteLine("Insert product descriptio");
-                productDescription = Console.ReadLine();
+                Console.WriteLine("Insert product description");
+                description = Console.ReadLine();
                 Console.WriteLine("Insert price");
                 price = Console.ReadLine();
-                Console.WriteLine("Insert image path");
-                imagePath = Console.ReadLine();
+                Console.WriteLine("Insert image url");
+                imgUrl = Console.ReadLine();
                 Console.WriteLine("Continue?");
                 toContinue = Console.ReadLine();
 
-                string query = "INSERT INTO Products(Category_ID, ProductName,ProductDescription, Price, ImgePath)" +
-                              "VALUES(@category_ID, @productName, @productDescription, @price, @imagePath)";
+                string query = "INSERT INTO Products(CategoryID, ProductName, Description, Price, ImgURL) VALUES(@categoryID, @productName, @description, @price, @imgUrl)";
 
                 using (SqlConnection cn = new SqlConnection(connectionString))
-
                 using (SqlCommand cmd = new SqlCommand(query, cn))
                 {
-                    cmd.Parameters.Add("@category_ID", SqlDbType.VarChar).Value = category_ID;
-                    cmd.Parameters.Add("@productName", SqlDbType.VarChar).Value = productName;
-                    cmd.Parameters.Add("@productDescription", SqlDbType.VarChar).Value = productDescription;
-                    cmd.Parameters.Add("@price", SqlDbType.VarChar).Value = price;
-                    cmd.Parameters.Add("@imagePath", SqlDbType.VarChar).Value = imagePath;
-
+                    cmd.Parameters.Add("@categoryID", SqlDbType.Int).Value = int.Parse(categoryID);
+                    cmd.Parameters.Add("@productName", SqlDbType.NVarChar, 50).Value = productName;
+                    cmd.Parameters.Add("@description", SqlDbType.NVarChar, 50).Value = description;
+                    cmd.Parameters.Add("@price", SqlDbType.Money).Value = decimal.Parse(price);
+                    cmd.Parameters.Add("@imgUrl", SqlDbType.NVarChar, 100).Value = imgUrl;
                     cn.Open();
                     rowsAffected = cmd.ExecuteNonQuery();
                     cn.Close();
                 }
             }
             return rowsAffected;
-
         }
     }
 

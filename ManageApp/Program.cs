@@ -11,12 +11,13 @@ namespace ManagerApp
     {
         static void Main(string[] args)
         {
-            string connectionString = "data source=srv2\\pupils;initial catalog=MyShopDB;Integrated Security=SSPI;Persist Security Info=False;TrustServerCertificate=true";
+            string connectionString = "data source=DESKTOP-E0FAPSB\\SQLEXPRESS;Database=LeahShopDB;Trusted_Connection=True;TrustServerCertificate=True;";
             Insert insert = new Insert();
             Read read = new Read();
+            read.read(connectionString);
+
             insert.InsertCategory(connectionString);
             insert.InsertProduct(connectionString);
-            read.read(connectionString);
         }
     }
 }

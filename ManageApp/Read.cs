@@ -11,7 +11,7 @@ namespace ManagerApp
     {
         internal void read(string connectionString)
         {
-            string queryString = "select * from Categories c join Products p on c.ID=p.Category_ID";
+            string queryString = "select * from Categories c join Products p on c.CategoryID = p.CategoryID";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand(queryString, connection);

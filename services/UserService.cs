@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Repositories;
-using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
 using Zxcvbn;
 
 namespace Services
@@ -22,26 +23,40 @@ namespace Services
             return "value";
         }
 
-        public async Task<User> Login(string UserName, string Password)
+        // Registration: hash password and store salt
+        public async Task<User> Post(User user)
         {
-            return await _UserRepository.Login(UserName, Password);
+            // Generate salt
+            user.Salt = GenerateSalt();
+            // Hash password with salt
+            user.Password = HashPassword(user.Password, user.Salt);
+            return await _UserRepository.Post(user);
         }
 
-        // POST api/<UsersController>
-
-
-        public async Task< User> Post(User user)
+        // Login: verify password
+        public async Task<User> Login(string UserName, string Password)
         {
-
-            return await _UserRepository.Post(user);
-
+            // Step 1: Get salt for username
+            var salt = await _UserRepository.GetSaltByUserName(UserName);
+            if (salt == null)
+                return null;
+            // Step 2: Hash entered password with salt
+            var hashed = HashPassword(Password, salt);
+            // Step 3: Query for user with username and hashed password
+            return await _UserRepository.Login(UserName, hashed);
         }
 
         // PUT api/<UsersController>/5
 
         public async Task Put(int id, User userToUpdate)
         {
-           await _UserRepository.Put(id, userToUpdate);
+            // If password is being updated, hash it
+            if (!string.IsNullOrEmpty(userToUpdate.Password))
+            {
+                userToUpdate.Salt = GenerateSalt();
+                userToUpdate.Password = HashPassword(userToUpdate.Password, userToUpdate.Salt);
+            }
+            await _UserRepository.Put(id, userToUpdate);
         }
         public int  Password(string Password)
         {
@@ -51,5 +66,25 @@ namespace Services
         }
 
 
+        // Helper: Generate random salt
+        private string GenerateSalt()
+        {
+            byte[] saltBytes = new byte[16];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(saltBytes);
+            }
+            return Convert.ToBase64String(saltBytes);
+        }
+
+        // Helper: Hash password with salt using PBKDF2
+        private string HashPassword(string password, string salt)
+        {
+            var saltBytes = Convert.FromBase64String(salt);
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, 100_000, HashAlgorithmName.SHA256))
+            {
+                return Convert.ToBase64String(pbkdf2.GetBytes(32));
+            }
+        }
     }
 }
