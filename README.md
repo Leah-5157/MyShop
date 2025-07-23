@@ -9,21 +9,21 @@ This project is a REST API developed with .NET Core. The project was developed f
 
 ### Technologies
 
-* .NET Core
-* REST API
-* Entity Framework (Database First)
-* Swagger
-* AutoMapper
-* zxcvbn (password strength checker)
-* xUnit
+* .NET Core  
+* REST API  
+* Entity Framework (Database First)  
+* Swagger  
+* AutoMapper  
+* zxcvbn (password strength checker)  
+* xUnit  
 
 ### Project Structure
 
 The project consists of three layers, adhering to the principle of separation of concerns:
 
-1. **Presentation Layer (Controllers):** Handles incoming requests and maps them to business logic.
-2. **Business Logic Layer (Services):** Contains the core application logic.
-3. **Data Access Layer (Repositories):** Interacts with the database using Entity Framework.
+1. **Presentation Layer (Controllers):** Handles incoming requests and maps them to business logic.  
+2. **Business Logic Layer (Services):** Contains the core application logic.  
+3. **Data Access Layer (Repositories):** Interacts with the database using Entity Framework.  
 
 These layers communicate with each other through Dependency Injection (DI).
 
@@ -31,9 +31,9 @@ These layers communicate with each other through Dependency Injection (DI).
 
 DI is used extensively throughout the project, providing several benefits:
 
-* Improved code maintainability
-* Enhanced testability
-* Better separation of concerns
+* Improved code maintainability  
+* Enhanced testability  
+* Better separation of concerns  
 
 ### Database
 
@@ -57,15 +57,15 @@ A lot of attention has been given to the DTO (Data Transfer Object) layer to avo
 
 ### Configuration
 
-* Configuration files include settings like connection strings.
-* The connection string is temporarily stored in `appsettings.json` but should be moved to user secrets for better security.
+* Configuration files include settings like connection strings.  
+* The connection string is temporarily stored in `appsettings.json` but should be moved to user secrets for better security.  
 
 ### Error Handling
 
 Errors are caught by the error handling middleware and handled properly. This includes:
 
-* Sending real-time email notifications to the administrator
-* Logging all errors in files for review and debugging
+* Sending real-time email notifications to the administrator  
+* Logging all errors in files for review and debugging  
 
 ### Monitoring
 
@@ -73,14 +73,30 @@ Traffic is monitored and logged in a dedicated table for analytical purposes wit
 
 ### Security
 
-* Password strength is validated using zxcvbn to ensure strong passwords.
-* Product prices are always retrieved from the database to ensure accuracy and prevent inconsistencies.
+* Password strength is validated using zxcvbn to ensure strong passwords.  
+* Product prices are always retrieved from the database to ensure accuracy and prevent inconsistencies.  
+
+### Caching
+
+* Implemented distributed caching using Redis to improve performance and reduce database load for frequently accessed data.  
 
 ### Testing
 
-* We performed integration tests in the repository layer against a temporary database created specifically for testing and deleted at the end of the test.
-* We performed unit tests in the service layer using a mocking framework like Moq to isolate and test functions with complex logic.
+* We performed integration tests in the repository layer against a temporary database created specifically for testing and deleted at the end of the test.  
+* We performed unit tests in the service layer using a mocking framework like Moq to isolate and test functions with complex logic.  
 
 ### Example Client
 
 We developed a small client using HTML and JavaScript to demonstrate an online store that uses this API.
+
+---
+
+### Additional Updates and Features
+
+- Added Content Security Policy (CSP) headers for improved security  
+- Implemented Rate Limiting middleware to prevent request abuse  
+- Introduced secure management of secrets using `Manager secret`  
+- Integrated distributed caching using Redis for performance improvements  
+- Created Docker support for the project to simplify deployment  
+- Implemented JWT authentication stored in HttpOnly cookies for better security  
+- Passwords are hashed including unique salt fields to increase security  
