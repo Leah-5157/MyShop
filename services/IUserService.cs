@@ -1,14 +1,15 @@
 ﻿using Entities;
+using System.Threading.Tasks;
 
 namespace Services
 {
     public interface IUserService
     {
-     
-        string Get(int id);
-        Task<User> Login(string UserName, string Password);
-        Task<User> Post(User user);
-        Task Put(int id, User userToUpdate);
-        int Password(string password);
+        Task<User> RegisterAsync(User user);
+        Task<User> LoginAsync(string userName, string password);
+        Task UpdateAsync(int id, User userToUpdate);
+        int GetPasswordStrength(string password);
+        string HashPassword(string password, string salt);
+        Task<string?> GetSaltByUserName(string userName);
     }
 }

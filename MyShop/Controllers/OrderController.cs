@@ -3,10 +3,7 @@ using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using DTO;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Authorization;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MyShop.Controllers
 {
@@ -15,41 +12,27 @@ namespace MyShop.Controllers
     [Authorize]
     public class OrderController : ControllerBase
     {
-        IOrderService _OrderService;
-        IMapper _mapper;
-        private readonly IMemoryCache _cache;
+        private readonly IOrderService _orderService;
+        private readonly IMapper _mapper;
 
-        public OrderController(IOrderService OrderService,IMapper mapper, IMemoryCache cache)
+        public OrderController(IOrderService orderService, IMapper mapper)
         {
-            _OrderService = OrderService;
+            _orderService = orderService;
             _mapper = mapper;
-            _cache = cache;
         }
 
-        // GET api/<OrderController>/5
         [HttpGet("{id}")]
-        public async Task<OrderDTO> Get(int id)
+        public async Task<OrderDTO> GetOrderById(int id)
         {
-            if (!_cache.TryGetValue($"Order_{id}", out OrderDTO orderDTO))
-            {
-                Order order = await _OrderService.GetByID(id);
-                orderDTO = _mapper.Map<Order, OrderDTO>(order);
-
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(10)); 
-
-                _cache.Set($"Order_{id}", orderDTO, cacheOptions);
-            }
-            return orderDTO;
+            var order = await _orderService.GetByID(id);
+            return _mapper.Map<Order, OrderDTO>(order);
         }
 
-        // POST api/<OrderController>
         [HttpPost]
-        public async Task<OrderDTO> Post([FromBody] PostOrderDTO order)
+        public async Task<OrderDTO> CreateOrder([FromBody] PostOrderDTO postOrderDto)
         {
-            Order ord = await _OrderService.Post(_mapper.Map<PostOrderDTO, Order>(order));
-            OrderDTO orderDTO = _mapper.Map<Order, OrderDTO>(ord);
-            return orderDTO;
+            var order = await _orderService.Post(_mapper.Map<PostOrderDTO, Order>(postOrderDto));
+            return _mapper.Map<Order, OrderDTO>(order);
         }
     }
 }

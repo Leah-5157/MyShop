@@ -10,7 +10,6 @@
 const Register = async() => {
     const newUser = GetDataFromDocumentForRegister();
     try {
-
         const response = await fetch("../api/Users", {
             method: 'POST',
             headers: {
@@ -24,10 +23,12 @@ const Register = async() => {
             alert("בדוק את תקינות השדות!")
         }
         else {
-            alert("New user!")
-            window.location.href = 'ShoppingBag.html'
+            const data = await response.json();
+            alert("New user!");
+            sessionStorage.setItem("id", data.id.toString());
+            sessionStorage.setItem("userName", data.userName);
+            window.location.href = 'ShoppingBag.html';
         }
-           
     } catch (error) {
         console.log(error)
     }
@@ -37,7 +38,6 @@ const GetDataFromDocumentForLogin = () => {
     const UserName = document.querySelector("#userName").value;
     const Password = document.querySelector("#password").value;
     return ({UserName, Password })
-  
 }
 const Login = async () => {
     const existUser = GetDataFromDocumentForLogin();
@@ -49,48 +49,30 @@ const Login = async () => {
             },
             body: JSON.stringify(existUser)
         });
-        const data = await loginPost.json();
-        console.log(data)
         if (!loginPost.ok) {
-            throw new Error(`HTTP error! status:${loginPost.status}`);
+            const errorText = await loginPost.text();
+            alert(errorText || "Login failed");
+            return;
         }
-        else {
-            alert("conected!!")
-            sessionStorage.setItem("id", data.id)
-            window.location.href = 'ShoppingBag.html'
+        const data = await loginPost.json();
+        console.log(data);
+        alert("Connected!");
+        sessionStorage.setItem("id", data.id);
+        sessionStorage.setItem("userName", data.userName);
+        // Check if redirectAfterLogin is set
+        const redirect = sessionStorage.getItem('redirectAfterLogin');
+        if (redirect) {
+            sessionStorage.removeItem('redirectAfterLogin');
+            window.location.href = redirect;
+        } else {
+            window.location.href = 'ShoppingBag.html';
         }
     } catch (error) {
-        alert("try again")
-        console.log(error)
+        alert("try again");
+        console.log(error);
     }
 }
 
-const Update = async () => {
-    const newDetails = GetDataFromDocumentForRegister();
-    try {
-
-        const responsePut = await fetch(`../api/Users/${sessionStorage.getItem('id')}`, {
-            method: "PUT",
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(newDetails)
-     
-        });
-        const dataPut = await responsePut.json
-        if (!responsePut.ok) { 
-            alert("try again")
-        }
-        else {
-            alert("פרטים עודכנו בהצלחה!")
-        }
-    }
-    
-    catch (error) {
-        alert("try again")
-        console.log(error)
-    }
-}
 const visible = () => {
     const newUser = document.querySelector(".newUser")
     newUser.classList.remove("newUser")

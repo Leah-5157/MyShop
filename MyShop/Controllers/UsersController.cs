@@ -1,24 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using Entities;
 using Services;
 using DTO;
 using AutoMapper;
-using MyShop;
 using Microsoft.AspNetCore.Authorization;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MyShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
     public class UsersController : ControllerBase
     {
-        IUserService _userService;
-        IMapper _mapper;
-        ILogger<UsersController> _logger;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
+        private readonly ILogger<UsersController> _logger;
         private readonly TokenService _tokenService;
         public UsersController(IUserService userService, IMapper mapper, ILogger<UsersController> logger, TokenService tokenService)
         {
@@ -27,22 +22,15 @@ namespace MyShop.Controllers
             _logger = logger;
             _tokenService = tokenService;
         }
-      
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-       
+
         [HttpPost("Login")]
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
-            User user = await _userService.Login(request.UserName, request.Password);
+            var user = await _userService.LoginAsync(request.UserName, request.Password);
             if (user != null)
             {
-                UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
+                var userDTO = _mapper.Map<User, UserDTO>(user);
                 _logger.LogInformation($"User {user.Id} enter to the application");
-                // Generate JWT
                 var token = _tokenService.GenerateToken(user.UserName, "User");
                 Response.Cookies.Append("jwt_token", token, new CookieOptions
                 {
@@ -55,46 +43,43 @@ namespace MyShop.Controllers
             }
             return Unauthorized("Invalid username or password");
         }
+
         [HttpPost("Password")]
-        public int Password([FromBody] string Password)
+        public int GetPasswordStrength([FromBody] string password)
         {
-            int score = _userService.Password(Password);
-            return score;
+            return _userService.GetPasswordStrength(password);
         }
-        // POST api/<UsersController>
+
         [HttpPost]
-
-        public async Task<ActionResult> Post([FromBody] PostUserDTO postUserDTO)
+        public async Task<ActionResult> Register([FromBody] PostUserDTO postUserDTO)
         {
-            User user = _mapper.Map<PostUserDTO, User>(postUserDTO);
-            int score = Password(user.Password);
+            var user = _mapper.Map<PostUserDTO, User>(postUserDTO);
+            int score = GetPasswordStrength(user.Password);
             if (score <= 2)
                 return BadRequest();
-            user = await _userService.Post(user);
-            if (user == null) {
+            user = await _userService.RegisterAsync(user);
+            if (user == null)
                 return BadRequest();
-            }
-            UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
-            return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
-
+            var userDTO = _mapper.Map<User, UserDTO>(user);
+            return CreatedAtAction(nameof(Register), new { id = userDTO.Id }, userDTO);
         }
+
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] PostUserDTO userToUpdateDTO)
-
+        [HttpPut("{id}/UpdatePassword")]
+        public async Task<ActionResult> UpdatePassword(int id, [FromBody] UpdatePasswordRequest request)
         {
-
-            User user = _mapper.Map<PostUserDTO, User>(userToUpdateDTO);
-
-            int score = Password(user.Password);
-            if (score <= 2)
-                return BadRequest();
-
-            await _userService.Put(id, user);
-            UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
-
+            var salt = await _userService.GetSaltByUserName(request.UserName);
+            if (salt == null)
+                return BadRequest("Please check the form fields.");
+            var user = await _userService.LoginAsync(request.UserName, request.CurrentPassword);
+            if (user == null)
+                return BadRequest("Please check the form fields.");
+            user.Password = _userService.HashPassword(request.NewPassword, salt);
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            await _userService.UpdateAsync(id, user);
+            var userDTO = _mapper.Map<User, UserDTO>(user);
             return Ok(userDTO);
-
         }
     }
 }

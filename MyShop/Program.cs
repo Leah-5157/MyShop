@@ -1,5 +1,8 @@
 using Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using MyShop.Middleware;
 using repositories;
@@ -11,9 +14,35 @@ using MyShop;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseNLog();
 // Add services to the container.
+
+// Add JWT authentication (token will be injected to Authorization header by CookieMiddleware)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
+    };
+});
+
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration["Redis:Configuration"];
+    var redisHost = builder.Configuration["Redis:Host"] ?? "redis:6379";
+    var redisPassword = Environment.GetEnvironmentVariable("REDIS_PASSWORD");
+    options.Configuration = string.IsNullOrEmpty(redisPassword)
+        ? redisHost
+        : $"{redisHost},password={redisPassword}";
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserService, UserService>();
@@ -47,7 +76,11 @@ app.UseStaticFiles();
 app.UseRatingMiddleware();
 
 app.UseErrorHandlingMiddleware();
-app.UseMiddleware<CookieMiddleware>();
+app.UseMiddleware<MyShop.Middleware.CookieMiddleware>();
+app.UseMiddleware<MyShop.Middleware.CspMiddleware>();
+app.UseMiddleware<MyShop.Middleware.RateLimitMiddleware>();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace MyShop
+namespace MyShop.Middleware
 {
     public class CookieMiddleware
     {

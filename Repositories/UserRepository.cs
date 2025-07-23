@@ -11,12 +11,8 @@ namespace Repositories
         public UserRepository(MyShopContext myShopContext) {
             _myShopContext = myShopContext;
         }
-        // GET api/<UsersController>/5
 
-        public string Get(int id)
-        {
-            return "value";
-        }
+
 
         public async Task<string?> GetSaltByUserName(string userName)
         {

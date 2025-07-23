@@ -6,29 +6,27 @@ using Microsoft.Extensions.Caching.Distributed;
 using Services;
 using System.Text.Json;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MyShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
-        IProductService _ProductService;
-        IMapper _Mapper;
-        ILogger<ProductController> _logger;
+        private readonly IProductService _productService;
+        private readonly IMapper _mapper;
+        private readonly ILogger<ProductController> _logger;
         private readonly IDistributedCache _cache;
-        public ProductController(IProductService ProductService, IMapper mapper, IDistributedCache cache, ILogger<ProductController> logger)
+
+        public ProductController(IProductService productService, IMapper mapper, IDistributedCache cache, ILogger<ProductController> logger)
         {
-            _ProductService = ProductService;
-            _Mapper = mapper;
+            _productService = productService;
+            _mapper = mapper;
             _cache = cache;
             _logger = logger;
-            _logger.LogInformation("Someone enter to the application");
         }
-        // GET: api/<ProductController>
+
         [HttpGet]
-        public async Task<IEnumerable<ProductDTO>> Get([FromQuery] string? desc, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] int?[] categoryIds)
+        public async Task<IEnumerable<ProductDTO>> GetProducts([FromQuery] string? desc, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] int?[] categoryIds)
         {
             string cacheKey = $"products_{desc}_{minPrice}_{maxPrice}_{string.Join(",", categoryIds)}";
             IEnumerable<ProductDTO>? productDTOs = null;
@@ -37,10 +35,10 @@ namespace MyShop.Controllers
             {
                 productDTOs = JsonSerializer.Deserialize<IEnumerable<ProductDTO>>(cached);
             }
-            else
+            if (productDTOs == null)
             {
-                IEnumerable<Product> products = await _ProductService.Get(desc, minPrice, maxPrice, categoryIds);
-                productDTOs = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
+                var products = await _productService.Get(desc, minPrice, maxPrice, categoryIds);
+                productDTOs = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
                 var options = new DistributedCacheEntryOptions
                 {
                     SlidingExpiration = TimeSpan.FromMinutes(10),

@@ -77,17 +77,22 @@ const generateDate = () => {
 }
 
 const placeOrder = async () => {
-    let user = JSON.parse(sessionStorage.getItem("id")) || null
+    let user = JSON.parse(sessionStorage.getItem("id")) || null;
     if (user == null)
-        window.location.href = 'Login.html'
-    let shoppingBag = JSON.parse(sessionStorage.getItem("orderItems")) || []
-    let products = []
-    let sum = 0
-    for (let i = 0; i < shoppingBag?.length; i++) {
-        let thisProduct = { ProductId: shoppingBag[i].productId, Quentity: 1 };
-        sum += shoppingBag[i].price
-        products.push(thisProduct)
+        window.location.href = 'Login.html';
+    let shoppingBag = JSON.parse(sessionStorage.getItem("orderItems")) || [];
+    let productMap = {};
+    let sum = 0;
+    for (let i = 0; i < shoppingBag.length; i++) {
+        let pid = shoppingBag[i].productId;
+        sum += shoppingBag[i].price;
+        if (!productMap[pid]) {
+            productMap[pid] = { ProductId: pid, Quantity: 1 };
+        } else {
+            productMap[pid].Quantity += 1;
+        }
     }
+    let products = Object.values(productMap);
     try {
         const orderPost = await fetch("../api/Order", {
             method: "POST",
@@ -97,23 +102,22 @@ const placeOrder = async () => {
             body: JSON.stringify({
                 OrderDate: "2025-01-05",
                 OrderSum: sum,
-                UserId: user,             
+                UserId: user,
                 orderItems: products
             })
         });
         if (orderPost.status == 204)
-            alert("not found product")
+            alert("not found product");
         if (!orderPost.ok)
             throw new Error(`HTTP error! status:${orderPost.status}`);
         const data = await orderPost.json();
-        alert(`number order ${data.orderId} secssed`)
-        sessionStorage.setItem("orderItems", JSON.stringify([]))
-        window.location.href = 'Products.html'
+        alert(`number order ${data.orderId} secssed`);
+        sessionStorage.setItem("orderItems", JSON.stringify([]));
+        window.location.href = 'Products.html';
     }
     catch (error) {
-        console.log(error)
+        console.log(error);
     }
-
 }
 
 

@@ -11,7 +11,8 @@ namespace ManagerApp
     {
         static void Main(string[] args)
         {
-            string connectionString = "data source=DESKTOP-E0FAPSB\\SQLEXPRESS;Database=LeahShopDB;Trusted_Connection=True;TrustServerCertificate=True;";
+            // connection string for 'home'
+            string connectionString = "Server=SRV2\\PUPILS;Database=My_Shop;Trusted_Connection=True;TrustServerCertificate=True";
             Insert insert = new Insert();
             Read read = new Read();
             read.read(connectionString);

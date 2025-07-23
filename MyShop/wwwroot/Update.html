@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Update User</title>
+    <link href="css/Login.css" rel="stylesheet" />
+    <script defer src="js/Update.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Update User Details</h1>
+            <label for="userName">Username:</label>
+            <input id="userName" type="text" />
+            <label for="currentPassword">Current Password:</label>
+            <input id="currentPassword" type="password" required />
+            <label for="newPassword">New Password:</label>
+            <input id="newPassword" type="password" required oninput="checkPasswordStrength()" />
+            <progress id="progress" max="4" value="0" style="width:90%;margin-top:6px;margin-bottom:6px;"></progress>
+            <span id="strengthLabel" class="strength-label"></span>
+            <label for="firstName">First Name:</label>
+            <input id="firstName" type="text" required />
+            <label for="lastName">Last Name:</label>
+            <input id="lastName" type="text" />
+            <button onclick="updateUser()">Update</button>
+        </div>
+    </div>
+</body>
+</html>
